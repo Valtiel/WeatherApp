@@ -1,0 +1,14 @@
+//
+//  AppConfig.xcconfig
+//  WeatherApp
+//
+//  Created by César Rosales on 09/05/2023.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+
+CITIES = ["miami", "caracas", "mexico"]
+APP_VERSION = 1
+BUILD_NUMBER = 2
+API_KEY = "b8d6841c817a5036ece8c3d10902ced1"
