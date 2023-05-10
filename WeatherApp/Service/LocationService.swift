@@ -13,6 +13,7 @@ import CoreLocation
 class LocationService : NSObject, ObservableObject, CLLocationManagerDelegate {
     
     @Published var status: CLAuthorizationStatus?
+    @Published var location: CLLocation?
     let locationManager: CLLocationManager
 
     override init() {
@@ -22,25 +23,14 @@ class LocationService : NSObject, ObservableObject, CLLocationManagerDelegate {
     }
     
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-        switch manager.authorizationStatus {
+        self.status = manager.authorizationStatus
+        switch status {
         case .authorizedWhenInUse:
-            status = .authorizedWhenInUse
             locationManager.requestLocation()
             break
             
-        case .restricted:
-            status = .restricted
-            manager.requestWhenInUseAuthorization()
-            break
-            
-        case .denied:
-            status = .denied
-            manager.requestWhenInUseAuthorization()
-            break
-            
-        case .notDetermined:
-            status = .notDetermined
-            manager.requestWhenInUseAuthorization()
+        case .restricted, .denied, .notDetermined:
+            locationManager.requestWhenInUseAuthorization()
             break
             
         default:

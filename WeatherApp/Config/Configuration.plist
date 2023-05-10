@@ -5,7 +5,7 @@
 	<key>Weather Service</key>
 	<string>OpenWeatherMap</string>
 	<key>Server URL</key>
-	<string>asdf</string>
+	<string>url</string>
 	<key>API Key</key>
 	<string>b8d6841c817a5036ece8c3d10902ced1</string>
 	<key>Cities</key>
