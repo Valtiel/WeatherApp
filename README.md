@@ -49,6 +49,8 @@ Some enhancements still in TO-DO due to time constraints:
 
 - MVVM can be simplified with deeper understanding of SwiftUI and Combine.
 
+- Support for different langugaes
+
 
 ## Tech Stack
 
