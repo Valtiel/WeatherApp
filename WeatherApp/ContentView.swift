@@ -23,7 +23,7 @@ struct ContentView: View {
                         return CityWeatherViewModel(weatherService: weatherService, city: City.name($0))
                     }
                 }
-                WeatherPagedView(viewModel: WeatherPagedViewModel(cities: viewModels))
+                WeatherPagedView(cities: viewModels)
             } else {
                 Text("ERROR")
             }

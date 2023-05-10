@@ -9,20 +9,17 @@ import SwiftUI
 
 struct WeatherPagedView: View {
     
-    @ObservedObject var viewModel: WeatherPagedViewModel
-
+    var cities: [CityWeatherViewModel]
+    
     var body: some View {
         VStack {
             TabView {
-                let cities = viewModel.cities
                 ForEach(cities, id: \.city) { cityDetailViewModel in
                     VStack {
                         CityWeatherView(viewModel: cityDetailViewModel)
                         Spacer()
-                        
                     }
                 }
-                
             }
             .tabViewStyle(.page)
         }
@@ -38,7 +35,7 @@ struct WeatherPagedView_Previews: PreviewProvider {
         
         let mockViewModelB = CityWeatherViewModel(weatherService: WeatherServiceFactory.createService(for: .mock), city: City.name("mock"))
         
-        WeatherPagedView(viewModel: WeatherPagedViewModel(cities:[mockViewModel, mockViewModelB]))
+        WeatherPagedView(cities:[mockViewModel, mockViewModelB])
             .background(Color.blue)
     }
 }
