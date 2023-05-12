@@ -20,7 +20,9 @@ struct CityWeatherView: View {
                 HeaderCardView(temperature: viewModel.temperature, description: viewModel.conditionDescription, feelsLike: viewModel.feelsLikeTemperature)
                     .transition(.move(edge: .top))
                     .animation(.easeInOut(duration: 0.2))
-                
+                HStack {
+                    
+                }
                 ForecastCardView(minTemperature: viewModel.minTemperature, maxTemperature: viewModel.maxTemperature)
                     .frame(maxWidth: .infinity, alignment: .center)
                     .transition(.move(edge: .bottom))
@@ -124,8 +126,6 @@ struct HeaderCardView: View {
     
     var body: some View {
         VStack {
-            
-            Group {
                 Text("\(description)")
                     .font(.headline)
                     .foregroundColor(.white)
@@ -133,13 +133,9 @@ struct HeaderCardView: View {
                     .font(.system(size: 80))
                     .bold()
                     .foregroundColor(.white)
-                
                 Text("Feels like \(String(format: "%.0f°", feelsLike))")
                     .foregroundColor(.white)
                     .font(.headline)
-                
-                
-            }
         }        .frame(maxWidth: .infinity, alignment: .center)
         
     }
@@ -158,7 +154,7 @@ struct ForecastCardView: View {
                     .foregroundColor(.white)
                 Group {
                     
-                    Text("Min: \(minTemperature) - Max: \(maxTemperature)")
+                    Text("Min: \(String(format: "%.0f°", minTemperature)) - Max: \(String(format: "%.0f°", maxTemperature))")
                         .font(.headline)
                         .foregroundColor(.white)
                     
@@ -166,7 +162,8 @@ struct ForecastCardView: View {
                 .padding([.horizontal], 20)
             }
             .padding(.all, 10)
-        }.frame(maxWidth: .infinity, alignment: .leading)
+        }.frame(minWidth: 40, maxWidth: .infinity,
+                alignment: .leading)
             .background(
                 Color.black.opacity(0.2)
             )
