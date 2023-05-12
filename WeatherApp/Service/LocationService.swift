@@ -15,7 +15,7 @@ class LocationService : NSObject, ObservableObject, CLLocationManagerDelegate {
     @Published var status: CLAuthorizationStatus?
     @Published var location: CLLocation?
     let locationManager: CLLocationManager
-
+    
     override init() {
         self.locationManager = CLLocationManager()
         super.init()
@@ -39,7 +39,7 @@ class LocationService : NSObject, ObservableObject, CLLocationManagerDelegate {
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        
+        location = locations.first
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {

@@ -30,14 +30,14 @@ struct Clouds: Codable {
 
 // MARK: - Coord
 struct Coord: Codable {
-    let lon, lat: Double
+    let lon, lat: Float
 }
 
 // MARK: - Main
 struct Main: Codable {
-    let temp, feelsLike: Double
-    let tempMin: Double
-    let tempMax: Double
+    let temp, feelsLike: Float
+    let tempMin: Float
+    let tempMax: Float
     let pressure, humidity: Int
 
     enum CodingKeys: String, CodingKey {
@@ -64,6 +64,6 @@ struct Weather: Codable {
 
 // MARK: - Wind
 struct Wind: Codable {
-    let speed: Double
+    let speed: Float
     let deg: Int
 }

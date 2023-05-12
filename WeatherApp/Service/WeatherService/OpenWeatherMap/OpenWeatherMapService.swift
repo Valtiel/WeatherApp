@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Combine
 
 class OpenWeatherMapService: WeatherService {
 
@@ -47,6 +48,36 @@ class OpenWeatherMapService: WeatherService {
             }
         }.resume()
     }
+    
+//    func getWeatherData(for code: String, suscriber: AnyPublisher<WeatherService.State, Never>) {
+//        let baseUrl = WeatherServiceBuilder(baseUrl: baseUrl, path: path)
+//
+//        let url = baseUrl
+//            .addQueryItem(name: "q", value: code)
+//            .addQueryItem(name: "units", value: "metric")
+//            .addQueryItem(name: "appid", value: apiKey)
+//            .build()
+//        
+//        URLSession(configuration: .default).dataTask(with: url) { [unowned self] data, response, error in
+//            guard let data = data, error == nil else {
+//                completion(.failure(WeatherServiceError.apiError))
+//                return
+//            }
+//            
+//            guard let response = response as? HTTPURLResponse, response.statusCode == 200 else {
+//                completion(.failure(WeatherServiceError.invalidResponse))
+//                return
+//            }
+//            
+//            do {
+//                let weatherData = try self.decodeResponse(data: data)
+//                
+//                completion(.success(weatherData))
+//            } catch {
+//                completion(.failure(WeatherServiceError.invalidData))
+//            }
+//        }.resume()
+//    }
     
     
     func getWeatherData(for code: String, completion: @escaping (Result<WeatherData, Error>) -> Void) {

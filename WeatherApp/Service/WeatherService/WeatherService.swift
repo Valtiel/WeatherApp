@@ -15,11 +15,11 @@ protocol WeatherService {
 struct WeatherData {
     let cityName: String
     let country: String
-    let temperature: Double
-    let feelsLikeTemperature: Double
-    let minTemperature: Double
-    let maxTemperature: Double
-    let windSpeed: Double
+    let temperature: Float
+    let feelsLikeTemperature: Float
+    let minTemperature: Float
+    let maxTemperature: Float
+    let windSpeed: Float
     let windDirection: Int
     let pressure: Int
     let humidity: Int
@@ -45,18 +45,6 @@ struct WeatherData {
     
     var formattedWindSpeed: String {
         return String(format: "%.1f m/s", windSpeed)
-    }
-    
-    var formattedWindDirectionShort: String {
-        let directions = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"]
-        let index = Int((windDirection + 22) / 45) % 8
-        return directions[index]
-    }
-    
-    var formattedWindDirection: String {
-        let directions = ["North", "NorthEast", "East", "SouthEast", "South", "SouthWest", "West", "NorthWest"]
-        let index = Int((windDirection + 22) / 45) % 8
-        return directions[index]
     }
     
     var formattedPressure: String {

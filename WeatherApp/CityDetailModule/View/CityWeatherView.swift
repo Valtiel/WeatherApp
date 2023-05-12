@@ -15,23 +15,27 @@ struct CityWeatherView: View {
         VStack {
             switch viewModel.state {
             case .loaded:
-                    HeaderCardView(viewModel: viewModel)
-                        .transition(.move(edge: .top))
-                        .animation(.easeInOut(duration: 0.2))
-                    WindConditionsCardView(viewModel: viewModel)
-                        .transition(.move(edge: .bottom))
-                        .animation(.easeInOut(duration: 0.2))
-                    ForecastCardView(viewModel: viewModel)
-                        .frame(maxWidth: .infinity, alignment: .center)
-                        .transition(.move(edge: .bottom))
-                        .animation(.easeInOut(duration: 0.2))
+                TopBarView(city: viewModel.cityName, country: viewModel.countryName, action: viewModel.fetchWeatherData)
+                
+                HeaderCardView(temperature: viewModel.temperature, description: viewModel.conditionDescription, feelsLike: viewModel.feelsLikeTemperature)
+                    .transition(.move(edge: .top))
+                    .animation(.easeInOut(duration: 0.2))
+                
+                ForecastCardView(minTemperature: viewModel.minTemperature, maxTemperature: viewModel.maxTemperature)
+                    .frame(maxWidth: .infinity, alignment: .center)
+                    .transition(.move(edge: .bottom))
+                    .animation(.easeInOut(duration: 0.2))
+                
+                WindConditionsCardView(windSpeed: viewModel.windSpeed, windDirection: viewModel.windDirection)
+                    .transition(.move(edge: .bottom))
+                    .animation(.easeInOut(duration: 0.2))
+     
             case .idle:
                 LoadingView()
             case .loading:
                 LoadingView()
             case .failed(let error):
-                ErrorView(error: error
-                , viewModel: viewModel)
+                ErrorView(error: error, action: viewModel.fetchWeatherData)
             }
             
         }.onAppear {
@@ -46,8 +50,8 @@ struct CityWeatherView: View {
 struct ErrorView: View {
     
     var error: Error
-    @ObservedObject var viewModel: CityWeatherViewModel
-
+    var action: () -> Void
+    
     var body: some View {
         VStack{
             HStack {
@@ -56,11 +60,9 @@ struct ErrorView: View {
                     .foregroundColor(.white)
                     .padding()
                 Spacer()
-                Button {
-                    viewModel.fetchWeatherData()
-                } label: {
+                Button(action: action, label: {
                     Image(systemName: "arrow.triangle.2.circlepath")
-                }.foregroundColor(Color.white)
+                }).foregroundColor(Color.white)
                     .frame(width: 60, height: 60)
                     .padding()
                     .imageScale(/*@START_MENU_TOKEN@*/.large/*@END_MENU_TOKEN@*/)
@@ -71,7 +73,7 @@ struct ErrorView: View {
             .font(.headline)
             .foregroundColor(.white)
             .padding()
-       
+        
     }
 }
 
@@ -87,42 +89,52 @@ struct LoadingView: View {
     }
 }
 
-struct HeaderCardView: View {
+struct TopBarView: View {
     
-    @ObservedObject var viewModel: CityWeatherViewModel
-    
+    var city: String
+    var country: String
+    var action: () -> Void
+
     var body: some View {
         VStack {
             HStack {
-                Text("\(viewModel.cityName) (\(viewModel.countryName))")
+                Text("\(city) (\(country))")
                     .font(.largeTitle)
                     .foregroundColor(.white)
                     .padding()
                 Spacer()
-                Button {
-                    viewModel.fetchWeatherData()
-                } label: {
+                Button(action: action, label: {
                     Image(systemName: "arrow.triangle.2.circlepath")
-                }.foregroundColor(Color.white)
+                }).foregroundColor(Color.white)
                     .frame(width: 60, height: 60)
                     .padding()
                     .imageScale(/*@START_MENU_TOKEN@*/.large/*@END_MENU_TOKEN@*/)
                 
             }.frame(maxWidth: .infinity, alignment: .center)
-            
-            
-            
+        }
+        
+    }
+}
+
+struct HeaderCardView: View {
+    
+    @State var temperature: Float
+    @State var description: String
+    @State var feelsLike: Float
+    
+    var body: some View {
+        VStack {
             
             Group {
-                Text("\(viewModel.conditionDescription)")
+                Text("\(description)")
                     .font(.headline)
                     .foregroundColor(.white)
-                Text(viewModel.temperature)
+                Text("\(String(format: "%.0f°", temperature))")
                     .font(.system(size: 80))
                     .bold()
                     .foregroundColor(.white)
-
-                Text("Feels like \(viewModel.feelsLikeTemperature)")
+                
+                Text("Feels like \(String(format: "%.0f°", feelsLike))")
                     .foregroundColor(.white)
                     .font(.headline)
                 
@@ -130,14 +142,13 @@ struct HeaderCardView: View {
             }
         }        .frame(maxWidth: .infinity, alignment: .center)
         
-        
-        
     }
 }
 
 struct ForecastCardView: View {
     
-    @ObservedObject var viewModel: CityWeatherViewModel
+    @State var minTemperature: Float
+    @State var maxTemperature: Float
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -147,7 +158,7 @@ struct ForecastCardView: View {
                     .foregroundColor(.white)
                 Group {
                     
-                    Text("Min: \(viewModel.minTemperature) - Max: \(viewModel.maxTemperature)")
+                    Text("Min: \(minTemperature) - Max: \(maxTemperature)")
                         .font(.headline)
                         .foregroundColor(.white)
                     
@@ -167,7 +178,8 @@ struct ForecastCardView: View {
 
 struct WindConditionsCardView: View {
     
-    @ObservedObject var viewModel: CityWeatherViewModel
+    @State var windSpeed: Float
+    @State var windDirection: String
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -177,10 +189,10 @@ struct WindConditionsCardView: View {
                     .foregroundColor(.white)
                 Group {
                     
-                    Text("Wind Speed: \(viewModel.windSpeed)")
+                    Text("Wind Speed: \(String(format: "%.1f m/s", windSpeed))")
                         .font(.headline)
                         .foregroundColor(.white)
-                    Text("Wind Direction: \(viewModel.windDirection)")
+                    Text("Wind Direction: \(windDirection)")
                         .font(.headline)
                         .foregroundColor(.white)
                     

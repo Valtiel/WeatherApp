@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import CoreLocation
 
 struct ContentView: View {
     
@@ -15,10 +16,15 @@ struct ContentView: View {
     var body: some View {
         VStack {
             if let weatherService = WeatherServiceFactory.createService(for: configProvider.config.weatherService, apiKey: configProvider.config.apiKey) {
-                
-                let viewModels: [CityWeatherViewModel] = configProvider.config.cities.map {
+                let cities = configProvider.config.cities
+                let viewModels: [CityWeatherViewModel] = cities.compactMap {
                     if $0 == "current" {
-                        return CityWeatherViewModel(weatherService: weatherService, city: City.location( lat: locationService.locationManager.location?.coordinate.latitude ?? 0, lon: locationService.locationManager.location?.coordinate.longitude ?? 0))
+                        if let latitude = locationService.location?.coordinate.latitude,
+                           let longitude = locationService.location?.coordinate.longitude {
+                            return CityWeatherViewModel(weatherService: weatherService, city: City.location( lat: latitude, lon: longitude))
+                        } else {
+                            return nil
+                        }
                     } else {
                         return CityWeatherViewModel(weatherService: weatherService, city: City.name($0))
                     }
